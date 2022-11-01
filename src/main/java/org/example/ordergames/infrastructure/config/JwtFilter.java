@@ -24,11 +24,18 @@ public class JwtFilter extends GenericFilterBean {
             filterChain.doFilter(request, response);
         } else {
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new ServletException("An exception occurred");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing authorization");
+                return;
             }
         }
         final String token = authHeader.substring(7);
-        final Claims claims = Jwts.parser().setSigningKey("secret").parseClaimsJws(token).getBody();
+        final Claims claims;
+        try {
+            claims = Jwts.parser().setSigningKey("secret").parseClaimsJws(token).getBody();
+        } catch (final Exception ex) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Wrong authorization");
+            return;
+        }
         request.setAttribute("claims", claims);
         filterChain.doFilter(request, response);
     }
