@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Component
-@FeignClient("cart-management")
+@FeignClient("carts")
 public interface CartManagementClient {
 
-    @GetMapping("/carts/{id}")
+    @GetMapping("/api/{id}")
     ResponseEntity<CartDTO> findById(@PathVariable final long id);
 }

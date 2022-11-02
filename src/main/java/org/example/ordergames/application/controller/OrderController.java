@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api")
 public class OrderController {
 
     Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -48,7 +48,7 @@ public class OrderController {
                 .body(orderId);
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     ResponseEntity<Object> updateStatus(@PathVariable final Long id, @RequestBody final UpdateStatusRequest updateStatusRequest) {
         if (updateStatusRequest.getOrderStatus() == null) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Order status needs to be provided");
@@ -66,7 +66,7 @@ public class OrderController {
                 .build();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     ResponseEntity<OrderDTO> findById(@PathVariable final Long id) {
         final OrderDO order;
 
